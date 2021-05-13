@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    app: sb-rest
+  name: sb-rest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sb-rest
+  template:
+    metadata:
+      labels:
+        app: sb-rest
+    spec:
+      containers:
+      - name: sb-rest
+        imagePullPolicy: Always
+        image: quay.io/rralhan/s2i-tekton:latest
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+      imagePullSecrets:
+      - name: quay-auth-secret
+#---
+
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  labels:
+#    app: sb-rest
+#  name: sb-rest
+#spec:
+#  ports:
+#  - name: 8080-tcp
+#    port: 8080
+#    protocol: TCP
+#    targetPort: 8080
+#  selector:
+#    app: sb-rest
+#  sessionAffinity: None
+#  type: ClusterIP
+
+#---
+
+#apiVersion: route.openshift.io/v1
+#kind: Route
+#metadata:
+#  labels:
+#    app: sb-rest
+#  name: sb-rest
+#spec:
+#  port:
+#    targetPort: 8080-tcp
+#  to:
+#    kind: Service
+#    name: sb-rest
+#    weight: 100
